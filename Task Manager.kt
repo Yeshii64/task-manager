@@ -8,23 +8,25 @@ fun main(){
 fun menu(){
     println("Yeshua's Task Manager")
     println("1. Add a task.")
-    println("2. Delete a task.")
-    println("3. Mark a task as done.")
-    println("4. Exit")
+    println("2. View tasks")
+    println("3. Delete a task.")
+    println("4. Mark a task as done.")
+    println("5. Exit")
     println("Choose a number: ")
 
     when(readlnOrNull()?.toIntOrNull()) {
         1 -> tasks.addAll(listmaking())
-        2 -> deletetask(tasks)
-        3 -> markedDone(tasks)
-        4 -> {
+        2 -> viewtasks(tasks)
+        3 -> deletetask(tasks)
+        4 -> markedDone(tasks)
+        5 -> {
             println("Closing program")
             return
         }
         else -> println("Invalid Try again")
     }
 }
-
+//function for adding tasks
 fun listmaking(): MutableList<String> {
     val list = mutableListOf<String>()
     var count = 0
@@ -40,6 +42,13 @@ fun listmaking(): MutableList<String> {
     }
     println("Task(s) added successfully")
     return list
+}
+
+//function for viewing the tasks (added this cause it makes sense.)
+fun viewtasks(list: MutableList<String>){
+    for (tasks in list){
+        println(tasks)
+    }
 }
 
 //function for deleting the tasks
@@ -71,12 +80,24 @@ fun deletetask(list: MutableList<String>){
 }
 
 //function for marking the task as finished
-//my plan is to have it not ask until the user has inputted a task
-
 fun markedDone(list: MutableList<String>){
     if(list.isEmpty()){
         println("Nothing to mark done since there are nothing in the list.")
-    }else{
-        print(list.indices)
+        return
     }
+    println("Your tasks:")
+    list.forEachIndexed{index, task -> println("$index: $task")}
+    println("Which task would you want to mark as done?")
+    val numDone = readlnOrNull()?.toIntOrNull()
+    println("Marking $numDone as done!")
+    if (numDone != null && numDone in list.indices){
+        //TODO figure out a way to concatenate this or do something!!
+    }else{
+        println("Invalid task number.")
+    }
+    println("Updated list: ")
+    for (task in list){
+        println(task)
+    }
+
 }
