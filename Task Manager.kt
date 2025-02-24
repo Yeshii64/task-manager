@@ -1,3 +1,5 @@
+import kotlin.system.exitProcess
+
 val tasks = mutableListOf<String>()
 fun main(){
     while(true){
@@ -19,14 +21,12 @@ fun menu(){
         2 -> viewtasks(tasks)
         3 -> deletetask(tasks)
         4 -> markedDone(tasks)
-        5 -> {
-            println("Closing program")
-            return
-        }
+        5 -> exit()
         else -> println("Invalid Try again")
     }
 }
-//function for adding tasks
+
+//function for adding the tasks
 fun listmaking(): MutableList<String> {
     val list = mutableListOf<String>()
     var count = 0
@@ -34,15 +34,16 @@ fun listmaking(): MutableList<String> {
     println("How many tasks do you want to put in your task manager: ") //asking how many tasks do you want in your list
     val taskNum = readlnOrNull()?.toIntOrNull() ?: return list
 
-    println("Please enter your task(s): ")
+    println("Please enter your task(s) (with description): ")
     while (count < taskNum){ //while loop for making sure the program pauses/stops after the max has been reached
         val userInput = readln() ?: ""
-        list.add(userInput)
+        list.add("$userInput : Not Done") //you could also use concatenation here
         count++
     }
     println("Task(s) added successfully")
     return list
 }
+
 
 //function for viewing the tasks (added this cause it makes sense.)
 fun viewtasks(list: MutableList<String>){
@@ -51,6 +52,7 @@ fun viewtasks(list: MutableList<String>){
     }
 }
 
+
 //function for deleting the tasks
 fun deletetask(list: MutableList<String>){
     if (list.isEmpty()){
@@ -58,7 +60,7 @@ fun deletetask(list: MutableList<String>){
         return
     }
     println("Your tasks: ")
-    list.forEachIndexed{index, task -> println("$index: $task") }
+    list.forEachIndexed{index, task -> println("$index: $task")}
     println("Do you want to delete some tasks? (Y/N)")
     val answer = readlnOrNull()
 
@@ -66,7 +68,7 @@ fun deletetask(list: MutableList<String>){
         println("Which task number do you want to delete?")
         val numDel = readlnOrNull()?.toIntOrNull()
         println("Okay.. deleting task $numDel")
-        if (numDel != null && numDel in list.indices) {
+        if (numDel != null && numDel in list.indices) { //used the indices method because I found it to be easier.
             list.removeAt(numDel)
         } else {
             println("Invalid task number.")
@@ -80,24 +82,30 @@ fun deletetask(list: MutableList<String>){
 }
 
 //function for marking the task as finished
-fun markedDone(list: MutableList<String>){
-    if(list.isEmpty()){
+fun markedDone(list: MutableList<String>) {
+    if (list.isEmpty()) {
         println("Nothing to mark done since there are nothing in the list.")
         return
     }
     println("Your tasks:")
-    list.forEachIndexed{index, task -> println("$index: $task")}
+    list.forEachIndexed { index, task -> println("$index: $task") }
     println("Which task would you want to mark as done?")
     val numDone = readlnOrNull()?.toIntOrNull()
     println("Marking $numDone as done!")
-    if (numDone != null && numDone in list.indices){
-        //TODO figure out a way to concatenate this or do something!!
-    }else{
-        println("Invalid task number.")
+    if (numDone != null && numDone in list.indices) {
+        if (numDone in list.indices) {
+            list[numDone] = "${list[numDone]} - Done!"
+        } else {
+            println("invalid")
+        }
+        println("Updated list: ")
+        for (task in list) {
+            println(task)
+        }
     }
-    println("Updated list: ")
-    for (task in list){
-        println(task)
-    }
-
+}
+//forget that not done shit lets code the exit function.
+fun exit(){
+    println("Okay! Buh bye! Closing program.")
+    exitProcess(1)
 }
